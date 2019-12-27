@@ -1,7 +1,7 @@
 import json
 import praw
 
-# loads credentials from json file
+# loads reddit API login info from json file
 with open('credentials.json') as f:
     params = json.load(f)
 
