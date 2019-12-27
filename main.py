@@ -20,5 +20,5 @@ new_python = subreddit.new(limit=5)
 for submission in new_python:
     print(submission.title)
 
-
+# TODO priority: get links for notifier
 # TODO pick manga/ connect to mangaplus /chart of upload dates/notify you dum
