@@ -17,7 +17,7 @@ reddit = praw.Reddit(client_id=params['client_id'],
 subreddit = reddit.subreddit('manga')
 
 '''new_python = subreddit.new(limit=1)  # limit of 984(max?)(5ish days ago)(replaced by stream() but need a way to get old posts(or host online))
-(have a separate loop for old posts in the range of 12ish hours? edit : maybe not stream had a 15 hour ago result)'''
+(have a separate loop for old posts in the range of 12ish hours? EDIT : maybe not, stream had a 15 hour ago result)'''
 x = 1
 
 for submission in subreddit.stream.submissions(): #constant stream of submissions
