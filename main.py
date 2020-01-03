@@ -12,14 +12,14 @@ reddit = praw.Reddit(client_id=params['client_id'],
                      password=params['password'],
                      user_agent=['user_agent'])
 
-# reddit calls
-subreddit = reddit.subreddit('manga')
+# pick a subreddit
+subreddit = reddit.subreddit('all')
 
-new_python = subreddit.new(limit=10)  # limit of 984(max?)(5ish days ago) works but slight stutter every 100 posts
+# new_python = subreddit.new(limit=500)  # limit of 984(max?)(5ish days ago)(replaced by stream() but need a way to get old posts(or host online))
 
 x = 1
-for submission in new_python:
-    if any(x in submission.title for x in ["Manga", "decent"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
+for submission in subreddit.stream.submissions(): #constant stream of submissions
+    if any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What']):  # case sensitive(might want lower method)(also use list(?) to do multi)
         print(submission.title)
         print(x)
         x += 1
