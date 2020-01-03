@@ -15,14 +15,14 @@ reddit = praw.Reddit(client_id=params['client_id'],
 # reddit calls
 subreddit = reddit.subreddit('manga')
 
-new_python = subreddit.new(limit=985) # limit of 984(max?)(5ish days ago) works but slight stutter every 100 posts
+new_python = subreddit.new(limit=10)  # limit of 984(max?)(5ish days ago) works but slight stutter every 100 posts
 
-x=1
+x = 1
 for submission in new_python:
-    
-    print(submission.title)
-    print(x)
-    x+=1
+    if any(x in submission.title for x in ["Manga", "decent"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
+        print(submission.title)
+        print(x)
+        x += 1
 
 # TODO priority: get links for notifier
 # TODO pick manga/ connect to mangaplus /chart of upload dates/notify you dum
