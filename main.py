@@ -1,5 +1,6 @@
 import json
 import praw
+from datetime import datetime
 
 # loads reddit API login info from json file
 with open('credentials.json') as f:
@@ -13,14 +14,17 @@ reddit = praw.Reddit(client_id=params['client_id'],
                      user_agent=['user_agent'])
 
 # pick a subreddit
-subreddit = reddit.subreddit('all')
+subreddit = reddit.subreddit('manga')
 
-# new_python = subreddit.new(limit=500)  # limit of 984(max?)(5ish days ago)(replaced by stream() but need a way to get old posts(or host online))
-
+'''new_python = subreddit.new(limit=1)  # limit of 984(max?)(5ish days ago)(replaced by stream() but need a way to get old posts(or host online))
+(have a separate loop for old posts in the range of 12ish hours?)'''
 x = 1
+
 for submission in subreddit.stream.submissions(): #constant stream of submissions
-    if any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What']):  # case sensitive(might want lower method)(also use list(?) to do multi)
+    if any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What',"[DISC]"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
         print(submission.title)
+        parsed_date = datetime.utcfromtimestamp(submission.created_utc) # still in UTC
+        print(parsed_date)
         print(x)
         x += 1
 
