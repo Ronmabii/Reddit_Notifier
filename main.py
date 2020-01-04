@@ -20,15 +20,18 @@ subreddit = reddit.subreddit('manga')
 (have a separate loop for old posts in the range of 12ish hours? EDIT : maybe not, stream had a 15 hour ago result)'''
 x = 1
 
-for submission in subreddit.stream.submissions(): #constant stream of submissions
+#constant stream of submissions
+for submission in subreddit.stream.submissions():
     if any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What',"[DISC]", "This"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
         print(submission.title)
+        print(submission.permalink)
+        print(submission.url)
         parsed_date = datetime.fromtimestamp(submission.created_utc)  #could convert to UTC then specific timezone
         print(parsed_date)
-        print(x)
+        print("---" + str(x) + "---")
         x += 1
 
-# TODO priority: get links for notifier
-# TODO pick manga/ connect to mangaplus /chart of upload dates/notify you dum
+# TODO priority: get links for notifier EDIT: dunzo
+# TODO pick manga EDIT: dunion / connect to mangaplus /chart of upload dates/notify you dum
 # TODO other: windows task manager to run on login
 # maybe get avg num of posts daily for predicting limit
