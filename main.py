@@ -1,6 +1,8 @@
+#!/Users/Ronnie-2.0/CODE/reddit_manga_notification/reddit_env/Scripts/python
 import json
 import praw
 from datetime import datetime, timezone
+import time
 
 # loads reddit API login info from json file
 with open('credentials.json') as f:
@@ -23,13 +25,14 @@ x = 1
 #constant stream of submissions
 for submission in subreddit.stream.submissions():
     if any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What',"[DISC]", "This"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
+        print("---" + str(x) + "---")
         print(submission.title)
         print(submission.permalink)
         print(submission.url)
         parsed_date = datetime.fromtimestamp(submission.created_utc)  #could convert to UTC then specific timezone
         print(parsed_date)
-        print("---" + str(x) + "---")
         x += 1
+        time.sleep(1)
 
 # TODO priority: get links for notifier EDIT: dunzo
 # TODO pick manga EDIT: dunion / connect to mangaplus /chart of upload dates/notify you dum
