@@ -1,8 +1,11 @@
 #!/Users/Ronnie-2.0/CODE/reddit_manga_notification/reddit_env/Scripts/python
 import json
+import sys
+print(sys.version)
 import praw
 from datetime import datetime, timezone
 import time
+
 
 # loads reddit API login info from json file
 with open('credentials.json') as f:
