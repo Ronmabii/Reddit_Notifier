@@ -1,6 +1,6 @@
 import json
 import praw
-from datetime import datetime
+from datetime import datetime, timezone
 
 # loads reddit API login info from json file
 with open('credentials.json') as f:
@@ -21,9 +21,9 @@ subreddit = reddit.subreddit('manga')
 x = 1
 
 for submission in subreddit.stream.submissions(): #constant stream of submissions
-    if any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What',"[DISC]"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
+    if any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What',"[DISC]", "This"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
         print(submission.title)
-        parsed_date = datetime.utcfromtimestamp(submission.created_utc) # still in UTC
+        parsed_date = datetime.fromtimestamp(submission.created_utc)  #could convert to UTC then specific timezone
         print(parsed_date)
         print(x)
         x += 1
