@@ -30,12 +30,12 @@ for submission in subreddit.stream.submissions():
     if any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What',"[DISC]", "This"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
         print("---" + str(x) + "---")
         print(submission.title)
-        print(submission.permalink)
+        print("https://reddit.com" + submission.permalink)
         print(submission.url)
         parsed_date = datetime.fromtimestamp(submission.created_utc)  #could convert to UTC then specific timezone
         print(parsed_date)
         x += 1
-        time.sleep(1)
+        time.sleep(.1)
 
 # TODO priority: get links for notifier EDIT: dunzo
 # TODO pick manga EDIT: dunion / connect to mangaplus /chart of upload dates/notify you dum
