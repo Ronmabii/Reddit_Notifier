@@ -37,7 +37,11 @@ for submission in subreddit.stream.submissions():
         x += 1
         time.sleep(.1)
 
+print("HEYYYYYYYYYYYYYYYY")
+
 # TODO priority: get links for notifier EDIT: dunzo
 # TODO pick manga EDIT: dunion / connect to mangaplus /chart of upload dates/notify you dum
 # TODO other: windows task manager to run on login
 # maybe get avg num of posts daily for predicting limit
+# stream never ends so we're stuck in that loop until the end of days maybe
+# possible host on heroku cuz its free
