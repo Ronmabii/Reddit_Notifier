@@ -26,8 +26,10 @@ subreddit = reddit.subreddit('manga')
 x = 1
 
 #constant stream of submissions (gets previous 100 posts up to current then updates every post)
-for submission in subreddit.stream.submissions():
-    if any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What',"[DISC]", "This"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
+for submission in subreddit.stream.submissions(pause_after=-1): #possiblepuase function to break after loop
+    if submission is None:
+        break
+    elif any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What',"[DISC]", "This"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
         print("---" + str(x) + "---")
         print(submission.title)
         print("https://reddit.com" + submission.permalink)
