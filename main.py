@@ -43,9 +43,9 @@ while True:
             with open('filler.txt', 'a') as fi:
                 fi.write(submission.title)
                 fi.write("\n")
-            # local notifier test    
-            if "Kengan Omega" in submission.title:
-                toaster.show_toast("Heyo", f"{submission.title}" )
+            # local notifier test could narrow down resulsts
+            if any(_ in submission.title for _ in ["no", "Kengan Omega"]):
+                toaster.show_toast("GASGASGAS", f"{submission.title}", threaded=False, duration=3 )
             x += 1
             time.sleep(.2)
 
