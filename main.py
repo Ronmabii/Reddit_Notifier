@@ -5,6 +5,7 @@ print(sys.version)
 import praw
 from datetime import datetime, timezone
 import time
+import win10toast
 
 
 # loads reddit API login info from json file
@@ -24,6 +25,7 @@ subreddit = reddit.subreddit('manga')
 '''new_python = subreddit.new(limit=1)  # limit of 984(max?)(5ish days ago)(replaced by stream() but need a way to get old posts(or host online))
 (have a separate loop for old posts in the range of 12ish hours? EDIT : maybe not, stream had a 15 hour ago result) test'''
 x = 1
+toaster = win10toast.ToastNotifier()
 
 #constant stream of submissions (gets previous 100 posts up to current then updates every post)
 while True:
@@ -37,11 +39,13 @@ while True:
             print(submission.url)
             parsed_date = datetime.fromtimestamp(submission.created_utc)  #could convert to UTC then specific timezone
             print(parsed_date)
-
+            # saving data
             with open('filler.txt', 'a') as fi:
-                fi.write(str(submission.title))
+                fi.write(submission.title)
                 fi.write("\n")
-
+            # local notifier test    
+            if "Kengan Omega" in submission.title:
+                toaster.show_toast("Heyo", f"{submission.title}" )
             x += 1
             time.sleep(.2)
 
@@ -56,3 +60,4 @@ while True:
 # stream never ends so we're stuck in that loop until the end of days maybe
 # possible host on heroku cuz its free (Pro tip use heroku environmental variables to store credentials)
 # TODO put stream code into a function
+# pypiwin32-223 pywin32-227 win10toast-0.9 for local notifier
