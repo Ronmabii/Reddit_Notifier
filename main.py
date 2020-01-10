@@ -1,9 +1,7 @@
 #!/Users/Ronnie-2.0/CODE/reddit_manga_notification/reddit_env/Scripts/python
 import json
-import sys
-print(sys.version)
 import praw
-from datetime import datetime, timezone
+from datetime import datetime
 import time
 import win10toast
 
@@ -27,29 +25,30 @@ reddit = praw.Reddit(client_id=params['client_id'],
 # pick a subreddit (technically not necessary here)
 subreddit = reddit.subreddit('manga')
 
-'''new_python = subreddit.new(limit=1)  # limit of 984(max?)(5ish days ago)(replaced by stream() but need a way to get old posts(or host online))
-(have a separate loop for old posts in the range of 12ish hours? EDIT : maybe not, stream had a 15 hour ago result) test'''
 x = 1
 toaster = win10toast.ToastNotifier()
 
-#constant stream of submissions (gets previous 100 posts up to current then updates every post)
+# constant stream of submissions (gets previous 100 posts too)
 while True:
-    for submission in subreddit.stream.submissions(pause_after=0): #possiblepuase function to break after loop
-        if submission is None:
+    for submission in subreddit.stream.submissions():  # pause (pause_after=0)
+        if submission is None:  # for the pause feature (unused for now)
             break
-        elif any(_ in submission.title for _ in listed_manga_list):  # case sensitive(might want lower method)(also use list(?) to do multi)
+        elif any(_ in submission.title for _ in listed_manga_list):
             print("---" + str(x) + "---")
             print(submission.title)
             print("https://reddit.com" + submission.permalink)
             print(submission.url)
             print(submission.link_flair_text)
-            parsed_date = datetime.fromtimestamp(submission.created_utc)  #could convert to UTC then specific timezone
+            parsed_date = datetime.fromtimestamp(submission.created_utc)
             print(parsed_date)
-            # saving data
-            with open('filler.txt', 'a') as fi:
-                fi.write(submission.title)
-                fi.write("\n")
-            # local notifier test could narrow down resulsts
+            # checks if data is already in filler.txt and adds if not
+            with open('filler.txt', 'r') as f:
+                red = f.read()         
+            if submission.title not in red:
+                with open('filler.txt', 'a') as f:
+                    f.write(submission.title)
+                    f.write("\n")
+            # local notifier test could narrow down results
             if any(_ in submission.title for _ in listed_manga_list) and submission.link_flair_text == "DISC":
                 toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3, icon_path="water.ico" )
             x += 1
