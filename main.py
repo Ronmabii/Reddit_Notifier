@@ -33,7 +33,7 @@ while True:
     for submission in subreddit.stream.submissions():  # pause (pause_after=0)
         if submission is None:  # for the pause feature (unused for now)
             break
-        elif any(_ in submission.title for _ in listed_manga_list):
+        elif any(_ in submission.title for _ in listed_manga_list) and submission.link_flair_text == "DISC":
             print("---" + str(x) + "---")
             print(submission.title)
             print("https://reddit.com" + submission.permalink)
@@ -50,13 +50,13 @@ while True:
                     f.write("\n")
             # local notifier test could narrow down results
             if any(_ in submission.title for _ in listed_manga_list) and submission.link_flair_text == "DISC":
-                toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3, icon_path="water.ico" )
+                toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
             x += 1
             time.sleep(.2)
 
     print("HEYYYYYYYYYYYYYYYY")
     time.sleep(10)
-    x=1
+    x = 1
 
 ''' possible class use(list of classes instead of json?)
 class Mangas:
@@ -75,3 +75,9 @@ class Mangas:
 # possible host on heroku cuz its free (Pro tip use heroku environmental variables to store credentials)
 # TODO put stream code into a function
 # pypiwin32-223 pywin32-227 win10toast-0.9 for local notifier
+
+'''
+{
+    Naruto: releaseinfo{chapter:date}
+}
+'''
