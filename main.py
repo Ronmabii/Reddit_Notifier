@@ -11,12 +11,12 @@ import win10toast
 # loads reddit API login info from json file
 with open('credentials.json') as f:
     params = json.load(f)
-
+# loads manga list with aptly named list
 with open('manga.json') as f2:
     manga_list = json.load(f2)
     listed_manga_list = list(manga_list.keys())
     print(listed_manga_list)
-    time.sleep(5)
+    time.sleep(3)
 # logs into reddit
 reddit = praw.Reddit(client_id=params['client_id'],
                      client_secret=params['client_secret'],
@@ -24,7 +24,7 @@ reddit = praw.Reddit(client_id=params['client_id'],
                      password=params['password'],
                      user_agent=['user_agent'])
 
-# pick a subreddit (technically not necessary)
+# pick a subreddit (technically not necessary here)
 subreddit = reddit.subreddit('manga')
 
 '''new_python = subreddit.new(limit=1)  # limit of 984(max?)(5ish days ago)(replaced by stream() but need a way to get old posts(or host online))
@@ -51,14 +51,23 @@ while True:
                 fi.write("\n")
             # local notifier test could narrow down resulsts
             if any(_ in submission.title for _ in listed_manga_list) and submission.link_flair_text == "DISC":
-                toaster.show_toast("GASGASGAS", f"{submission.title}", threaded=False, duration=3 )
+                toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3, icon_path="water.ico" )
             x += 1
             time.sleep(.2)
 
     print("HEYYYYYYYYYYYYYYYY")
-    time.sleep(5)
+    time.sleep(10)
     x=1
 
+''' possible class use(list of classes instead of json?)
+class Mangas:
+
+    def __init__(self, title, chapter, release_date):
+        self.title = title
+        self.chapter = chapter
+        self.release_date
+
+ '''
 # TODO priority: get links for notifier EDIT: dunzo
 # TODO pick manga EDIT: dunion / connect to mangaplus /chart of upload dates/notify you dum
 # TODO other: windows task manager to run on login
