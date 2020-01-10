@@ -12,6 +12,11 @@ import win10toast
 with open('credentials.json') as f:
     params = json.load(f)
 
+with open('manga.json') as f2:
+    manga_list = json.load(f2)
+    listed_manga_list = list(manga_list.keys())
+    print(listed_manga_list)
+    time.sleep(5)
 # logs into reddit
 reddit = praw.Reddit(client_id=params['client_id'],
                      client_secret=params['client_secret'],
@@ -32,11 +37,12 @@ while True:
     for submission in subreddit.stream.submissions(pause_after=0): #possiblepuase function to break after loop
         if submission is None:
             break
-        elif any(_ in submission.title for _ in ["MangaDex", "[ART] Fubuki", "a Legend", "Black ",'What',"[DISC]", "This"]):  # case sensitive(might want lower method)(also use list(?) to do multi)
+        elif any(_ in submission.title for _ in listed_manga_list):  # case sensitive(might want lower method)(also use list(?) to do multi)
             print("---" + str(x) + "---")
             print(submission.title)
             print("https://reddit.com" + submission.permalink)
             print(submission.url)
+            print(submission.link_flair_text)
             parsed_date = datetime.fromtimestamp(submission.created_utc)  #could convert to UTC then specific timezone
             print(parsed_date)
             # saving data
@@ -44,7 +50,7 @@ while True:
                 fi.write(submission.title)
                 fi.write("\n")
             # local notifier test could narrow down resulsts
-            if any(_ in submission.title for _ in ["no", "Kengan Omega"]):
+            if any(_ in submission.title for _ in listed_manga_list) and submission.link_flair_text == "DISC":
                 toaster.show_toast("GASGASGAS", f"{submission.title}", threaded=False, duration=3 )
             x += 1
             time.sleep(.2)
