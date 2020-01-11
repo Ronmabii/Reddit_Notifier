@@ -84,4 +84,7 @@ class Mangas:
     Naruto's son : [[chapter1, chapter 2], [jan 1, jan 2]]
 }
  or just take data from filler.txt
+ or csv Manga, Chapter, Release Date
+ if Ch. or Chapter
+ wait older chapters may not be needed (regex or list comprehension.isdigit)?
 '''
