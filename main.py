@@ -47,7 +47,7 @@ while True:
                 f.seek(0) # reads from end of file without (but should?)
                 red = f.read()
                 if submission.title not in red:
-                    f.write(submission.title)
+                    f.write(str(submission.title) + " - " + str(parsed_date))
                     f.write("\n")
             # local notifier test could narrow down results
             if any(_ in submission.title for _ in listed_manga_list) and submission.link_flair_text == "DISC":
@@ -83,4 +83,5 @@ class Mangas:
              chapter:date}
     Naruto's son : [[chapter1, chapter 2], [jan 1, jan 2]]
 }
+ or just take data from filler.txt
 '''
