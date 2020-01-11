@@ -14,8 +14,7 @@ with open('manga.json') as f2:
     manga_list = json.load(f2)
     listed_manga_list = list(manga_list.keys())
     print(listed_manga_list)
-    print(manga_list["Black Clover"])
-    time.sleep(3)
+    time.sleep(2)
 # logs into reddit
 reddit = praw.Reddit(client_id=params['client_id'],
                      client_secret=params['client_secret'],
@@ -44,14 +43,13 @@ while True:
             print(parsed_date)
             # checks if data is already in filler.txt and adds if not
             with open('filler.txt', 'a+') as f:
-                f.seek(0) # reads from end of file without (but should?)
+                f.seek(0)  # reads from end of file without (but should?)
                 red = f.read()
                 if submission.title not in red:
                     f.write(str(submission.title) + " - " + str(parsed_date))
                     f.write("\n")
             # local notifier test could narrow down results
-            if any(_ in submission.title for _ in listed_manga_list) and submission.link_flair_text == "DISC":
-                toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
+            toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
             x += 1
             time.sleep(.2)
 
