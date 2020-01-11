@@ -75,7 +75,7 @@ class Mangas:
 # stream never ends so we're stuck in that loop until the end of days maybe
 # possible host on heroku cuz its free (Pro tip use heroku environmental variables to store credentials)
 # TODO put stream code into a function
-# pypiwin32-223 pywin32-227 win10toast-0.9 for local notifier
+# pypiwin32-223 pywin32-227 win10toast-0.9 for wintoaster
 
 ''' dict in dict? use csv instead of json to append
 {
@@ -87,4 +87,5 @@ class Mangas:
  or csv Manga, Chapter, Release Date
  if Ch. or Chapter
  wait older chapters may not be needed (regex or list comprehension.isdigit)?
+ regex continued: IF THERES MULTIPLE NUMBERS GET THE LAST ONE genius me ( 52 ways to eat 4 paprikas chapter 2 = [52,4,2])
 '''
