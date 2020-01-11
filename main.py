@@ -14,6 +14,7 @@ with open('manga.json') as f2:
     manga_list = json.load(f2)
     listed_manga_list = list(manga_list.keys())
     print(listed_manga_list)
+    print(manga_list["Black Clover"])
     time.sleep(3)
 # logs into reddit
 reddit = praw.Reddit(client_id=params['client_id'],
@@ -42,10 +43,10 @@ while True:
             parsed_date = datetime.fromtimestamp(submission.created_utc)
             print(parsed_date)
             # checks if data is already in filler.txt and adds if not
-            with open('filler.txt', 'r') as f:
-                red = f.read()         
-            if submission.title not in red:
-                with open('filler.txt', 'a') as f:
+            with open('filler.txt', 'a+') as f:
+                f.seek(0) # reads from end of file without (but should?)
+                red = f.read()
+                if submission.title not in red:
                     f.write(submission.title)
                     f.write("\n")
             # local notifier test could narrow down results
@@ -76,8 +77,10 @@ class Mangas:
 # TODO put stream code into a function
 # pypiwin32-223 pywin32-227 win10toast-0.9 for local notifier
 
-'''
+''' dict in dict? use csv instead of json to append
 {
-    Naruto: releaseinfo{chapter:date}
+    Naruto: {chapter:date,
+             chapter:date}
+    Naruto's son : [[chapter1, chapter 2], [jan 1, jan 2]]
 }
 '''
