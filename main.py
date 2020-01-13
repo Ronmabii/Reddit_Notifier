@@ -15,7 +15,6 @@ with open('manga.json') as f2:
     manga_list = json.load(f2)
     listed_manga_list = list(manga_list.keys())
     print(listed_manga_list)
-    time.sleep(2)
 # logs into reddit
 reddit = praw.Reddit(client_id=params['client_id'],
                      client_secret=params['client_secret'],
@@ -40,20 +39,24 @@ while True:
             print("https://reddit.com" + submission.permalink)
             print(submission.url)
             print(submission.link_flair_text)
+            # data for csv file
             parsed_date = datetime.fromtimestamp(submission.created_utc)
-            print(parsed_date)
+            parsed_date_date = parsed_date.date()
+            parsed_date_time = parsed_date.time()
+            print(parsed_date_date)
+            print(parsed_date_time)
             chapter = re.findall(r'\d+', submission.title)[-1]
             for item in listed_manga_list:
                 if item in submission.title:
                     title = item
-            # checks if data is already in filler.txt and adds if not
+            # checks if submission is already in filler.csv and adds if not
             with open('filler.csv', 'a+') as f:
                 f.seek(0)  # reads from end of file without (but should?)
-                red = f.read()
+                checked = f.read()
                 # loop is to print out manga.json title, not whole title
-                if (title + "," + chapter) not in red:
-                            f.write(title + "," + chapter + "," + str(parsed_date))
-                            f.write("\n")
+                if (title + "," + chapter) not in checked:
+                    f.write(title + "," + chapter + "," + str(parsed_date))
+                    f.write("\n")
             # local notifier test could narrow down results
             toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
             x += 1
