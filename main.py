@@ -41,9 +41,11 @@ def process_submission(submission, title):
     parsed_date_time = parsed_date.time()
     print(parsed_date_date)
     print(parsed_date_time)
+    # get last number which should be chap # otherwise default
     try:
         chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
-    except: chapter = "Other"
+    except IndexError:
+        chapter = "Other"
     # checks if submission is already in filler.csv and adds if not
     with open('filler.csv', 'a+') as f:
         f.seek(0)  # reads from end of file without (but should?)
