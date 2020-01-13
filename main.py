@@ -4,6 +4,7 @@ import praw
 from datetime import datetime
 import time
 import win10toast
+import re
 
 
 # loads reddit API login info from json file
@@ -41,13 +42,18 @@ while True:
             print(submission.link_flair_text)
             parsed_date = datetime.fromtimestamp(submission.created_utc)
             print(parsed_date)
+            chapter = re.findall(r'\d+', submission.title)[-1]
+            for item in listed_manga_list:
+                if item in submission.title:
+                    title = item
             # checks if data is already in filler.txt and adds if not
-            with open('filler.txt', 'a+') as f:
+            with open('filler.csv', 'a+') as f:
                 f.seek(0)  # reads from end of file without (but should?)
                 red = f.read()
-                if submission.title not in red:
-                    f.write(str(submission.title) + " - " + str(parsed_date))
-                    f.write("\n")
+                # loop is to print out manga.json title, not whole title
+                if (title + "," + chapter) not in red:
+                            f.write(title + "," + chapter + "," + str(parsed_date))
+                            f.write("\n")
             # local notifier test could narrow down results
             toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
             x += 1
@@ -74,6 +80,7 @@ class Mangas:
 # possible host on heroku cuz its free (Pro tip use heroku environmental variables to store credentials)
 # TODO put stream code into a function
 # pypiwin32-223 pywin32-227 win10toast-0.9 for wintoaster
+# should add static save if only local since 8 hours+ missed
 
 ''' dict in dict? use csv instead of json to append
 {
