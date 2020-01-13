@@ -41,7 +41,7 @@ def process_submission(submission, item):
     parsed_date_time = parsed_date.time()
     print(parsed_date_date)
     print(parsed_date_time)
-    chapter = re.findall(r'\d+', submission.title)[-1]
+    chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
     title = item
     # checks if submission is already in filler.csv and adds if not
     with open('filler.csv', 'a+') as f:
