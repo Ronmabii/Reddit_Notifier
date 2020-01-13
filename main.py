@@ -28,7 +28,8 @@ subreddit = reddit.subreddit('manga')
 x = 1
 toaster = win10toast.ToastNotifier()
 
-def process_submission(submission,itemq):
+
+def process_submission(submission, item):
     global x
     print("---" + str(x) + "---")
     print(submission.title)
@@ -41,7 +42,7 @@ def process_submission(submission,itemq):
     print(parsed_date_date)
     print(parsed_date_time)
     chapter = re.findall(r'\d+', submission.title)[-1]
-    title = itemq
+    title = item
     # checks if submission is already in filler.csv and adds if not
     with open('filler.csv', 'a+') as f:
         f.seek(0)  # reads from end of file without (but should?)
@@ -59,12 +60,13 @@ def process_submission(submission,itemq):
 # constant stream of submissions (gets previous 100 posts too)
 def main():
     while True:
-        for submission in subreddit.stream.submissions():  # pause (pause_after=0)
+        for submission in subreddit.stream.submissions():  # (pause_after=0)
             if submission is None:  # for the pause feature (unused for now)
                 break
             for item in listed_manga_list:
                 if item in submission.title and submission.link_flair_text == "DISC":
-                    process_submission(submission,item)
+                    process_submission(submission, item)
+
 
 if __name__ == "__main__":
     main()
