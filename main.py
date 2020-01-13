@@ -29,7 +29,7 @@ x = 1
 toaster = win10toast.ToastNotifier()
 
 
-def process_submission(submission, item):
+def process_submission(submission, title):
     global x
     print("---" + str(x) + "---")
     print(submission.title)
@@ -42,14 +42,14 @@ def process_submission(submission, item):
     print(parsed_date_date)
     print(parsed_date_time)
     chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
-    title = item
+    short_title = title
     # checks if submission is already in filler.csv and adds if not
     with open('filler.csv', 'a+') as f:
         f.seek(0)  # reads from end of file without (but should?)
-        checked = f.read()
+        history = f.read()
         # loop is to print out manga.json title, not whole title
-        if (title + "," + chapter) not in checked:
-            f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time))
+        if (title + "," + chapter) not in history:
+            f.write(short_title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time))
             f.write("\n")
     # local notifier test could narrow down results
     toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
@@ -63,9 +63,9 @@ def main():
         for submission in subreddit.stream.submissions():  # (pause_after=0)
             if submission is None:  # for the pause feature (unused for now)
                 break
-            for item in listed_manga_list:
-                if item in submission.title and submission.link_flair_text == "DISC":
-                    process_submission(submission, item)
+            for title in listed_manga_list:
+                if title in submission.title and submission.link_flair_text == "DISC":
+                    process_submission(submission, title)
 
 
 if __name__ == "__main__":
