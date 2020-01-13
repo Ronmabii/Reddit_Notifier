@@ -38,7 +38,6 @@ while True:
             print(submission.title)
             print("https://reddit.com" + submission.permalink)
             print(submission.url)
-            print(submission.link_flair_text)
             # data for csv file
             parsed_date = datetime.fromtimestamp(submission.created_utc)
             parsed_date_date = parsed_date.date()
@@ -55,7 +54,7 @@ while True:
                 checked = f.read()
                 # loop is to print out manga.json title, not whole title
                 if (title + "," + chapter) not in checked:
-                    f.write(title + "," + chapter + "," + str(parsed_date))
+                    f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time))
                     f.write("\n")
             # local notifier test could narrow down results
             toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
