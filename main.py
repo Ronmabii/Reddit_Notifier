@@ -80,26 +80,9 @@ class Mangas:
         self.release_date
 
  '''
-# TODO priority: get links for notifier EDIT: dunzo
-# TODO pick manga EDIT: dunion / connect to mangaplus /chart of upload dates/notify you dum
+
+# TODO connect to mangaplus /chart of upload dates
 # TODO other: windows task manager to run on login
 # maybe get avg num of posts daily for predicting limit
-# stream never ends so we're stuck in that loop until the end of days maybe
 # possible host on heroku cuz its free (Pro tip use heroku environmental variables to store credentials)
-# TODO put stream code into a function EDIT:DUNION
-# pypiwin32-223 pywin32-227 win10toast-0.9 for wintoaster
 # should add static save if only local since 8 hours+ missed
-
-''' dict in dict? use csv instead of json to append
-{
-    Naruto: {chapter:date,
-             chapter:date}
-    Naruto's son : [[chapter1, chapter 2], [jan 1, jan 2]]
-}
- or just take data from filler.txt
- or csv Manga, Chapter, Release Date
- if Ch. or Chapter
- wait older chapters may not be needed (regex or list comprehension.isdigit)?
- regex continued: IF THERES MULTIPLE NUMBERS GET THE LAST ONE genius me ( 52 ways to eat 4 paprikas chapter 2 = [52,4,2])
-regex error: does not write if chapter includes decimals eg: chapter 10.5
-'''
