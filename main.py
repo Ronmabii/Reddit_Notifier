@@ -59,13 +59,10 @@ def process_submission(submission, title):
 
 # constant stream of submissions (gets previous 100 posts too)
 def main():
-    while True:
-        for submission in subreddit.stream.submissions():  # (pause_after=0)
-            if submission is None:  # for the pause feature (unused for now)
-                break
-            for title in listed_manga_list:
-                if title in submission.title and submission.link_flair_text == "DISC":
-                    process_submission(submission, title)
+    for submission in subreddit.stream.submissions():  # (pause_after=0)
+        for title in listed_manga_list:
+            if title in submission.title and submission.link_flair_text == "DISC":
+                process_submission(submission, title)
 
 
 if __name__ == "__main__":
