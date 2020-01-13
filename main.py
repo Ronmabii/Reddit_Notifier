@@ -41,15 +41,16 @@ def process_submission(submission, title):
     parsed_date_time = parsed_date.time()
     print(parsed_date_date)
     print(parsed_date_time)
-    chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
-    short_title = title
+    try:
+        chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
+    except: chapter = "Other"
     # checks if submission is already in filler.csv and adds if not
     with open('filler.csv', 'a+') as f:
         f.seek(0)  # reads from end of file without (but should?)
         history = f.read()
         # loop is to print out manga.json title, not whole title
         if (title + "," + chapter) not in history:
-            f.write(short_title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time))
+            f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time))
             f.write("\n")
     # local notifier test could narrow down results
     toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
