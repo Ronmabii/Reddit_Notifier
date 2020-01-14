@@ -26,7 +26,7 @@ subreddit = reddit.subreddit('manga')
 x = 1
 toaster = win10toast.ToastNotifier()
 
-
+# processes stream data and handles notifications
 def process_submission(submission, title):
     global x
     print("---" + str(x) + "---")
@@ -57,7 +57,7 @@ def process_submission(submission, title):
     x += 1
 
 
-# similar to first process but without delays or notification
+# processes old posts with no delay or notifications
 def process_old_submission(submission, title):
     parsed_date = datetime.fromtimestamp(submission.created_utc)
     parsed_date_date = parsed_date.date()
@@ -74,7 +74,7 @@ def process_old_submission(submission, title):
             f.write("\n")
 
 
-# gets previous 1000 posts in case i missed some
+# gets previous 400 posts in case i missed some
 def old_posts():
     for submission in subreddit.new(limit=400):
         for title in listed_manga_list:
@@ -83,7 +83,7 @@ def old_posts():
 
 
 # constant stream of submissions (gets previous 100 posts too)
-def main():
+def stream():
     for submission in subreddit.stream.submissions():  # (pause_after=0)
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
@@ -92,23 +92,11 @@ def main():
 
 if __name__ == "__main__":
     old_posts()
-    main()
-
-''' possible class use(list of classes instead of json?)
-class Mangas:
-
-    def __init__(self, title, chapter, release_date):
-        self.title = title
-        self.chapter = chapter
-        self.release_date
-
- '''
+    stream()
 
 # TODO connect to mangaplus /chart of upload dates
-# TODO other: windows task manager to run on login
-# maybe get avg num of posts daily for predicting limit
+# TODO other: windows task manager to run on login (bat)
 # possible host on heroku cuz its free (Pro tip use heroku environmental variables to store credentials)
-# # TODO 2 options: dedicated local or go online edit: 1000 limit goes back 5ish days so could tone it down abit
 # 400 went back 41 hours so maybe a little lower
 # TODO sort csv by date
 # TODO x familt error (Ch.19 returns .19 grr)
