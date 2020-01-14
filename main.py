@@ -1,8 +1,6 @@
-#!/Users/Ronnie-2.0/CODE/reddit_manga_notification/reddit_env/Scripts/python
 import json
 import praw
 from datetime import datetime
-import time
 import win10toast
 import re
 
@@ -57,8 +55,9 @@ def process_submission(submission, title):
     # local notifier test could narrow down results
     toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
     x += 1
-    time.sleep(.2)
 
+
+# similar to first process but without delays or notification
 def process_old_submission(submission, title):
     parsed_date = datetime.fromtimestamp(submission.created_utc)
     parsed_date_date = parsed_date.date()
@@ -77,7 +76,7 @@ def process_old_submission(submission, title):
 
 # gets previous 1000 posts in case i missed some
 def old_posts():
-    for submission in subreddit.new(limit=1000):
+    for submission in subreddit.new(limit=400):
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
                 process_old_submission(submission, title)
@@ -109,4 +108,7 @@ class Mangas:
 # TODO other: windows task manager to run on login
 # maybe get avg num of posts daily for predicting limit
 # possible host on heroku cuz its free (Pro tip use heroku environmental variables to store credentials)
-# # TODO 2 options: dedicated local or go online
+# # TODO 2 options: dedicated local or go online edit: 1000 limit goes back 5ish days so could tone it down abit
+# 400 went back 41 hours so maybe a little lower
+# TODO sort csv by date
+# TODO x familt error (Ch.19 returns .19 grr)
