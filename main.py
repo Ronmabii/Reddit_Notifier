@@ -59,6 +59,29 @@ def process_submission(submission, title):
     x += 1
     time.sleep(.2)
 
+def process_old_submission(submission, title):
+    parsed_date = datetime.fromtimestamp(submission.created_utc)
+    parsed_date_date = parsed_date.date()
+    parsed_date_time = parsed_date.time()
+    try:
+        chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
+    except IndexError:
+        chapter = "Other"
+    with open('filler.csv', 'a+') as f:
+        f.seek(0) 
+        history = f.read()
+        if (title + "," + chapter) not in history:
+            f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time))
+            f.write("\n")
+
+
+# gets previous 1000 posts in case i missed some
+def old_posts():
+    for submission in subreddit.new(limit=1000):
+        for title in listed_manga_list:
+            if title in submission.title and submission.link_flair_text == "DISC":
+                process_old_submission(submission, title)
+
 
 # constant stream of submissions (gets previous 100 posts too)
 def main():
@@ -69,6 +92,7 @@ def main():
 
 
 if __name__ == "__main__":
+    old_posts()
     main()
 
 ''' possible class use(list of classes instead of json?)
@@ -85,4 +109,4 @@ class Mangas:
 # TODO other: windows task manager to run on login
 # maybe get avg num of posts daily for predicting limit
 # possible host on heroku cuz its free (Pro tip use heroku environmental variables to store credentials)
-# should add static save if only local since 8 hours+ missed
+# # TODO 2 options: dedicated local or go online
