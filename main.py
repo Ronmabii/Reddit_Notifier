@@ -27,7 +27,7 @@ x = 1
 toaster = win10toast.ToastNotifier()
 
 # processes stream data and handles notifications
-def process_submission(submission, title):
+def process_stream(submission, title):
     global x
     print("---" + str(x) + "---")
     print(submission.title)
@@ -50,15 +50,14 @@ def process_submission(submission, title):
         history = f.read()
         # loop is to print out manga.json title, not whole title
         if (title + "," + chapter) not in history:
-            f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time))
-            f.write("\n")
-    # local notifier test could narrow down results
+            f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
+    # local notifier test
     toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
     x += 1
 
 
-# processes old posts with no delay or notifications
-def process_old_submission(submission, title):
+# mostly the same as stream but with no delay or notifications
+def process_old_posts(submission, title):
     parsed_date = datetime.fromtimestamp(submission.created_utc)
     parsed_date_date = parsed_date.date()
     parsed_date_time = parsed_date.time()
@@ -70,16 +69,15 @@ def process_old_submission(submission, title):
         f.seek(0) 
         history = f.read()
         if (title + "," + chapter) not in history:
-            f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time))
-            f.write("\n")
+            f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
 
 
 # gets previous 400 posts in case i missed some
 def old_posts():
-    for submission in subreddit.new(limit=400):
+    for submission in subreddit.new(limit=420):
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
-                process_old_submission(submission, title)
+                process_old_posts(submission, title)
 
 
 # constant stream of submissions (gets previous 100 posts too)
@@ -87,7 +85,7 @@ def stream():
     for submission in subreddit.stream.submissions():  # (pause_after=0)
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
-                process_submission(submission, title)
+                process_stream(submission, title)
 
 
 if __name__ == "__main__":
@@ -96,7 +94,6 @@ if __name__ == "__main__":
 
 # TODO connect to mangaplus /chart of upload dates
 # TODO other: windows task manager to run on login (bat)
-# possible host on heroku cuz its free (Pro tip use heroku environmental variables to store credentials)
 # 400 went back 41 hours so maybe a little lower
-# TODO sort csv by date
+# TODO sort csv by date maybe a stack could do it
 # TODO x familt error (Ch.19 returns .19 grr)
