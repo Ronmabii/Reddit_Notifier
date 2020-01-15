@@ -3,6 +3,7 @@ import praw
 from datetime import datetime
 import win10toast
 import re
+import time
 
 
 # loads reddit API login info from json file
@@ -60,9 +61,10 @@ def stream():
                 x += 1
 
 old_stack = []
-# gets previous 400 posts in case i missed some
+# gets previous 1000 posts in case i missed some
 def old_posts():
-    for submission in subreddit.new(limit=1000):
+    start = time.time()
+    for submission in subreddit.new(limit=700):
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
                 parsed_date = datetime.fromtimestamp(submission.created_utc)
@@ -73,15 +75,18 @@ def old_posts():
                 except IndexError:
                     chapter = "Other"
                 with open('filler.csv', 'r') as f:
-                    f.seek(0) 
                     history = f.read()
                     if (title + "," + chapter) not in history:
                         old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
-    with open('filler.csv', 'a') as f:
-        for i in old_stack:
-            last = old_stack.pop()
-            f.write(last)
-            print(last)
+    if old_stack:
+        print(old_stack)
+        with open('filler.csv', 'a') as f:
+            while old_stack:
+                last = old_stack.pop()
+                f.write(last)
+                print(last)
+    end = time.time()
+    print(end - start)
 
 if __name__ == "__main__":
     old_posts()
