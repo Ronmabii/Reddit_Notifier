@@ -27,25 +27,6 @@ x = 1
 toaster = win10toast.ToastNotifier()
 
 
-# gets previous 400 posts in case i missed some
-def old_posts():
-    for submission in subreddit.new(limit=420):
-        for title in listed_manga_list:
-            if title in submission.title and submission.link_flair_text == "DISC":
-                parsed_date = datetime.fromtimestamp(submission.created_utc)
-                parsed_date_date = parsed_date.date()
-                parsed_date_time = parsed_date.time()
-                try:
-                    chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
-                except IndexError:
-                    chapter = "Other"
-                with open('filler.csv', 'a+') as f:
-                    f.seek(0) 
-                    history = f.read()
-                    if (title + "," + chapter) not in history:
-                        f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
-
-
 # constant stream of submissions (gets previous 100 posts too)
 def stream():
     for submission in subreddit.stream.submissions():  # (pause_after=0)
@@ -78,6 +59,24 @@ def stream():
                 toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
                 x += 1
 
+
+# gets previous 400 posts in case i missed some
+def old_posts():
+    for submission in subreddit.new(limit=420):
+        for title in listed_manga_list:
+            if title in submission.title and submission.link_flair_text == "DISC":
+                parsed_date = datetime.fromtimestamp(submission.created_utc)
+                parsed_date_date = parsed_date.date()
+                parsed_date_time = parsed_date.time()
+                try:
+                    chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
+                except IndexError:
+                    chapter = "Other"
+                with open('filler.csv', 'a+') as f:
+                    f.seek(0) 
+                    history = f.read()
+                    if (title + "," + chapter) not in history:
+                        f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
 
 if __name__ == "__main__":
     old_posts()
