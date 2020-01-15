@@ -59,10 +59,10 @@ def stream():
                 toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
                 x += 1
 
-
+old_stack = []
 # gets previous 400 posts in case i missed some
 def old_posts():
-    for submission in subreddit.new(limit=420):
+    for submission in subreddit.new(limit=1000):
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
                 parsed_date = datetime.fromtimestamp(submission.created_utc)
@@ -72,11 +72,16 @@ def old_posts():
                     chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
                 except IndexError:
                     chapter = "Other"
-                with open('filler.csv', 'a+') as f:
+                with open('filler.csv', 'r') as f:
                     f.seek(0) 
                     history = f.read()
                     if (title + "," + chapter) not in history:
-                        f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
+                        old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
+    with open('filler.csv', 'a') as f:
+        for i in old_stack:
+            last = old_stack.pop()
+            f.write(last)
+            print(last)
 
 if __name__ == "__main__":
     old_posts()
@@ -85,5 +90,4 @@ if __name__ == "__main__":
 # TODO connect to mangaplus /chart of upload dates
 # TODO other: windows task manager to run on login (bat)
 # 400 went back 41 hours so maybe a little lower
-# TODO sort csv by date maybe a stack could do it
 # TODO x familt error (Ch.19 returns .19 grr)
