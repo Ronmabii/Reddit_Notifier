@@ -56,15 +56,17 @@ def stream():
                     # loop is to print out manga.json title, not whole title
                     if (title + "," + chapter) not in history:
                         f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
-                # local notifier test
-                toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
+                        # local notifier test
+                        toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
                 x += 1
 
+
 old_stack = []
-# gets previous 1000 posts in case i missed some
+
+
+# gets previous 700 posts in case i missed some
 def old_posts():
-    start = time.time()
-    for submission in subreddit.new(limit=700):
+    for submission in subreddit.new(limit=640): # ~3 days back
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
                 parsed_date = datetime.fromtimestamp(submission.created_utc)
@@ -78,21 +80,23 @@ def old_posts():
                     history = f.read()
                     if (title + "," + chapter) not in history:
                         old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
+    # if old stack isnt empty, pop everything into csv for correct order
     if old_stack:
         print(old_stack)
         with open('filler.csv', 'a') as f:
             while old_stack:
                 last = old_stack.pop()
                 f.write(last)
-                print(last)
-    end = time.time()
-    print(end - start)
+
 
 if __name__ == "__main__":
+    start = time.time()
+    print("Timing...")
     old_posts()
+    end = time.time()
+    print(end - start)
     stream()
 
 # TODO connect to mangaplus /chart of upload dates
 # TODO other: windows task manager to run on login (bat)
-# 400 went back 41 hours so maybe a little lower
 # TODO x familt error (Ch.19 returns .19 grr)
