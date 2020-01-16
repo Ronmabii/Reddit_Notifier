@@ -64,9 +64,12 @@ def stream():
 old_stack = []
 
 
-# gets previous 700 posts in case i missed some
+# gets previous 640 posts in case i missed some
 def old_posts():
     for submission in subreddit.new(limit=640): # ~3 days back
+        '''parsed_date1 = datetime.fromtimestamp(submission.created_utc)
+        print(submission.title)
+        print(parsed_date1)'''
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
                 parsed_date = datetime.fromtimestamp(submission.created_utc)
@@ -75,7 +78,10 @@ def old_posts():
                 try:
                     chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
                 except IndexError:
-                    chapter = "Other"
+                    if "Oneshot" in submission.title:
+                        chapter = "Oneshot"
+                    else:
+                        chapter = "Other"
                 with open('filler.csv', 'r') as f:
                     history = f.read()
                     if (title + "," + chapter) not in history:
