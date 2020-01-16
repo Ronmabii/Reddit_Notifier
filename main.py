@@ -76,12 +76,12 @@ def old_posts():
                 parsed_date_date = parsed_date.date()
                 parsed_date_time = parsed_date.time()
                 try:
-                    chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
-                except IndexError:
                     if "Oneshot" in submission.title:
                         chapter = "Oneshot"
                     else:
-                        chapter = "Other"
+                        chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
+                except IndexError:
+                    chapter = "Other"
                 with open('filler.csv', 'r') as f:
                     history = f.read()
                     if (title + "," + chapter) not in history:
