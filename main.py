@@ -46,7 +46,12 @@ def stream():
                 print(parsed_date_time)
                 # get last number which should be chap # otherwise default
                 try:
-                    chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
+                    if "Oneshot" in submission.title:
+                        chapter = "Oneshot"
+                    elif "Doujinshi" in submission.title:
+                        chapter = "Doujinshi " + re.findall(r'[\d\.\d]+', submission.title)[-1]
+                    else:
+                        chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
                 except IndexError:
                     chapter = "Other"
                 # checks if submission is already in filler.csv and adds if not
@@ -78,6 +83,8 @@ def old_posts():
                 try:
                     if "Oneshot" in submission.title:
                         chapter = "Oneshot"
+                    elif "Doujinshi" in submission.title:
+                        chapter = "Doujinshi " + re.findall(r'[\d\.\d]+', submission.title)[-1]
                     else:
                         chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
                 except IndexError:
