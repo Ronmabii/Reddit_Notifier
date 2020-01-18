@@ -106,7 +106,7 @@ if __name__ == "__main__":
     print("Loading...")
     old_posts()
     end = time.time()
-    print("Loaded in " + str(end - start) + " seconds")
+    print("Loaded in " + str(round((end - start), 2)) + " seconds")
     stream()
 
 # TODO connect to mangaplus /chart of upload dates
