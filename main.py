@@ -13,7 +13,6 @@ with open('credentials.json') as f:
 with open('manga.json') as f2:
     manga_list = json.load(f2)
     listed_manga_list = list(manga_list.keys())
-    print(listed_manga_list)
 # logs into reddit
 reddit = praw.Reddit(client_id=params['client_id'],
                      client_secret=params['client_secret'],
@@ -95,19 +94,19 @@ def old_posts():
                         old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
     # if old stack isnt empty, pop everything into csv for correct order
     if old_stack:
-        print(old_stack)
         with open('filler.csv', 'a') as f:
             while old_stack:
                 last = old_stack.pop()
+                print(last)
                 f.write(last)
 
 
 if __name__ == "__main__":
     start = time.time()
-    print("Timing...")
+    print("Loading...")
     old_posts()
     end = time.time()
-    print(end - start)
+    print("Loaded in " + str(end - start) + " seconds")
     stream()
 
 # TODO connect to mangaplus /chart of upload dates
