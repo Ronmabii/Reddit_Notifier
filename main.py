@@ -23,39 +23,25 @@ reddit = praw.Reddit(client_id=params['client_id'],
 # pick a subreddit (technically not necessary here)
 subreddit = reddit.subreddit('manga')
 
-x = 1
-toaster = win10toast.ToastNotifier()
-
 
 # constant stream of submissions (gets previous 100 posts too)
 def stream():
+    toaster = win10toast.ToastNotifier()
     for submission in subreddit.stream.submissions():  # (pause_after=0)
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
-                global x
+                x = 1
                 print("---" + str(x) + "---")
                 print(submission.title)
                 print("https://reddit.com" + submission.permalink)
                 print(submission.url)
                 # data for csv file
-                parsed_date = datetime.fromtimestamp(submission.created_utc)
-                parsed_date_date = parsed_date.date()
-                parsed_date_time = parsed_date.time()
+                parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
                 print(parsed_date_date)
                 print(parsed_date_time)
-                # get last number which should be chap # otherwise default
-                try:
-                    if "Oneshot" in submission.title:
-                        chapter = "Oneshot"
-                    elif "Doujinshi" in submission.title:
-                        chapter = "Doujinshi " + re.findall(r'[\d\.\d]+', submission.title)[-1]
-                    elif "RAW" in submission.title:
-                        continue
-                    else:
-                        chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
-                except IndexError:
-                    chapter = "Other"
                 # checks if submission is already in filler.csv and adds if not
+                if skip is True:
+                    continue
                 with open('filler.csv', 'a+') as f:
                     f.seek(0)  # reads from end of file without (but should?)
                     history = f.read()
@@ -73,25 +59,11 @@ old_stack = []
 # gets previous 640 posts in case i missed some
 def old_posts():
     for submission in subreddit.new(limit=640): # ~3 days back
-        '''parsed_date1 = datetime.fromtimestamp(submission.created_utc)
-        print(submission.title)
-        print(parsed_date1)'''
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
-                parsed_date = datetime.fromtimestamp(submission.created_utc)
-                parsed_date_date = parsed_date.date()
-                parsed_date_time = parsed_date.time()
-                try:
-                    if "Oneshot" in submission.title:
-                        chapter = "Oneshot"
-                    elif "Doujinshi" in submission.title:
-                        chapter = "Doujinshi " + re.findall(r'[\d\.\d]+', submission.title)[-1]
-                    elif "RAW" in submission.title:
-                        continue
-                    else:
-                        chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
-                except IndexError:
-                    chapter = "Other"
+                parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
+                if skip is True:
+                    continue
                 with open('filler.csv', 'r') as f:
                     history = f.read()
                     if (title + "," + chapter) not in history:
@@ -105,6 +77,29 @@ def old_posts():
                 f.write(last)
 
 
+def process_data(submission):
+    # ignore submission initialize
+    skip = False
+    # mandatory initialize chapter
+    chapter = None
+    # split datetime into date and time
+    parsed_date = datetime.fromtimestamp(submission.created_utc)
+    parsed_date_date = parsed_date.date()
+    parsed_date_time = parsed_date.time()
+    # chapter nunmbering with special cases
+    try:
+        if "Oneshot" in submission.title:
+            chapter = "Oneshot"
+        elif "Doujinshi" in submission.title:
+            chapter = "Doujinshi " + re.findall(r'[\d\.\d]+', submission.title)[-1]
+        elif "RAW" in submission.title:
+            skip = True
+        else:
+            chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
+    except IndexError:
+        chapter = "Other"
+    return parsed_date_date, parsed_date_time, chapter, skip
+
 
 if __name__ == "__main__":
     start = time.time()
@@ -117,3 +112,6 @@ if __name__ == "__main__":
 # TODO connect to mangaplus /chart of upload dates
 # TODO other: windows task manager to run on login (bat)
 # TODO x familt error (Ch.19 returns .19 grr)
+# djsaio
+#doisajdaop
+#jfnupoiesjfn
