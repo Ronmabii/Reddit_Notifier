@@ -20,18 +20,19 @@ reddit = praw.Reddit(client_id=params['client_id'],
                      password=params['password'],
                      user_agent=['user_agent'])
 
-# pick a subreddit (technically not necessary here)
+# pick a subreddit
 subreddit = reddit.subreddit('manga')
 
 
 # constant stream of submissions (gets previous 100 posts too)
 def stream():
+    # activate the toaster
     toaster = win10toast.ToastNotifier()
-    for submission in subreddit.stream.submissions():  # (pause_after=0)
+    x = 1
+    for submission in subreddit.stream.submissions():
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
-                # print info for .bat window 
-                x = 1
+                # print info for .bat window              
                 print("---" + str(x) + "---")
                 print(submission.title)
                 print("https://reddit.com" + submission.permalink)
@@ -58,9 +59,11 @@ def stream():
 old_stack = []
 
 
-# gets previous 640 posts in case i missed some
+# gets previous 640 posts + timer
 def old_posts():
-    for submission in subreddit.new(limit=640): # ~3 days back
+    start = time.time()
+    print("Loading...\n")
+    for submission in subreddit.new(limit=640):  # ~3 days back
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
                 parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
@@ -78,6 +81,8 @@ def old_posts():
                 last = old_stack.pop()
                 print(last)
                 f.write(last)
+    end = time.time()
+    print("Loaded in " + str(round((end - start), 2)) + " seconds\n")
 
 
 def process_data(submission):
@@ -105,12 +110,8 @@ def process_data(submission):
 
 
 if __name__ == "__main__":
-    # run main functions with a timer for old posts
-    start = time.time()
-    print("Loading...\n")
+    # run main functions
     old_posts()
-    end = time.time()
-    print("Loaded in " + str(round((end - start), 2)) + " seconds\n")
     stream()
 
 # TODO connect to mangaplus /chart of upload dates
