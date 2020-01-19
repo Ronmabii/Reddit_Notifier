@@ -30,6 +30,7 @@ def stream():
     for submission in subreddit.stream.submissions():  # (pause_after=0)
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
+                # print info for .bat window 
                 x = 1
                 print("---" + str(x) + "---")
                 print(submission.title)
@@ -39,16 +40,17 @@ def stream():
                 parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
                 print(parsed_date_date)
                 print(parsed_date_time)
-                # checks if submission is already in filler.csv and adds if not
+                # continue didn't work in def() because not in loop so here we are
                 if skip is True:
                     continue
+                # checks if submission is already in filler.csv and adds if not
                 with open('filler.csv', 'a+') as f:
-                    f.seek(0)  # reads from end of file without (but should?)
+                    f.seek(0)  # a+ does not read from start (?)
                     history = f.read()
-                    # loop is to print out manga.json title, not whole title
+                    # adding only new data to csv file and notifying
                     if (title + "," + chapter) not in history:
                         f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
-                        # local notifier test
+                        # notifier
                         toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
                 x += 1
 
