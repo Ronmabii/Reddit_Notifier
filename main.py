@@ -68,6 +68,7 @@ def old_posts():
                     continue
                 with open('filler.csv', 'r') as f:
                     history = f.read()
+                    # adds posts into stack to reverse order
                     if (title + "," + chapter) not in history:
                         old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
     # if old stack isnt empty, pop everything into csv for correct order
@@ -82,13 +83,13 @@ def old_posts():
 def process_data(submission):
     # ignore submission initialize
     skip = False
-    # mandatory initialize chapter
+    # mandatory chapter initialize
     chapter = None
     # split datetime into date and time
     parsed_date = datetime.fromtimestamp(submission.created_utc)
     parsed_date_date = parsed_date.date()
     parsed_date_time = parsed_date.time()
-    # chapter nunmbering with special cases
+    # chapter numbering with special cases
     try:
         if "Oneshot" in submission.title:
             chapter = "Oneshot"
@@ -104,8 +105,9 @@ def process_data(submission):
 
 
 if __name__ == "__main__":
+    # run main functions with a timer for old posts
     start = time.time()
-    print("Loading...")
+    print("Loading...\n")
     old_posts()
     end = time.time()
     print("Loaded in " + str(round((end - start), 2)) + " seconds\n")
@@ -114,6 +116,3 @@ if __name__ == "__main__":
 # TODO connect to mangaplus /chart of upload dates
 # TODO other: windows task manager to run on login (bat)
 # TODO x familt error (Ch.19 returns .19 grr)
-# djsaio
-#doisajdaop
-#jfnupoiesjfn
