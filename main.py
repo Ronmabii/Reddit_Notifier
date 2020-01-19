@@ -49,6 +49,8 @@ def stream():
                         chapter = "Oneshot"
                     elif "Doujinshi" in submission.title:
                         chapter = "Doujinshi " + re.findall(r'[\d\.\d]+', submission.title)[-1]
+                    elif "RAW" in submission.title:
+                        continue
                     else:
                         chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
                 except IndexError:
@@ -84,6 +86,8 @@ def old_posts():
                         chapter = "Oneshot"
                     elif "Doujinshi" in submission.title:
                         chapter = "Doujinshi " + re.findall(r'[\d\.\d]+', submission.title)[-1]
+                    elif "RAW" in submission.title:
+                        continue
                     else:
                         chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
                 except IndexError:
@@ -101,12 +105,13 @@ def old_posts():
                 f.write(last)
 
 
+
 if __name__ == "__main__":
     start = time.time()
     print("Loading...")
     old_posts()
     end = time.time()
-    print("Loaded in " + str(round((end - start), 2)) + " seconds")
+    print("Loaded in " + str(round((end - start), 2)) + " seconds\n")
     stream()
 
 # TODO connect to mangaplus /chart of upload dates
