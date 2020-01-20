@@ -10,9 +10,14 @@ import time
 with open('credentials.json') as f:
     params = json.load(f)
 # loads manga list with aptly named list
-with open('manga.json') as f2:
+with open('manga.txt') as f2:
+    listed_manga_list = [line.rstrip("\n") for line in f2]
+    print(listed_manga_list)
+
+'''with open('manga.json') as f2:
     manga_list = json.load(f2)
-    listed_manga_list = list(manga_list.keys())
+    listed_manga_list = list(manga_list.keys())'''
+    
 # logs into reddit
 reddit = praw.Reddit(client_id=params['client_id'],
                      client_secret=params['client_secret'],
@@ -41,6 +46,7 @@ def stream():
                 parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
                 print(parsed_date_date)
                 print(parsed_date_time)
+                print("\n")
                 # continue didn't work in def() because not in loop so here we are
                 if skip is True:
                     continue
@@ -61,6 +67,7 @@ old_stack = []
 
 # gets previous 640 posts + timer
 def old_posts():
+    # start timer
     start = time.time()
     print("Loading...\n")
     for submission in subreddit.new(limit=640):  # ~3 days back
@@ -76,11 +83,13 @@ def old_posts():
                         old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
     # if old stack isnt empty, pop everything into csv for correct order
     if old_stack:
+        print("Added:")
         with open('filler.csv', 'a') as f:
             while old_stack:
                 last = old_stack.pop()
                 print(last)
                 f.write(last)
+    # stop timer
     end = time.time()
     print("Loaded in " + str(round((end - start), 2)) + " seconds\n")
 
@@ -103,6 +112,7 @@ def process_data(submission):
         elif "RAW" in submission.title:
             skip = True
         else:
+            # find last number in post x.x (should be chap number)
             chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
     except IndexError:
         chapter = "Other"
