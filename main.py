@@ -12,12 +12,11 @@ with open('credentials.json') as f:
 # loads manga list with aptly named list
 with open('manga.txt') as f2:
     listed_manga_list = [line.rstrip("\n") for line in f2]
-    print(listed_manga_list)
 
 '''with open('manga.json') as f2:
     manga_list = json.load(f2)
     listed_manga_list = list(manga_list.keys())'''
-    
+
 # logs into reddit
 reddit = praw.Reddit(client_id=params['client_id'],
                      client_secret=params['client_secret'],
@@ -62,11 +61,10 @@ def stream():
                 x += 1
 
 
-old_stack = []
-
-
 # gets previous 640 posts + timer
 def old_posts():
+    # temporary storage for old posts
+    old_stack = []
     # start timer
     start = time.time()
     print("Loading...\n")
@@ -91,7 +89,7 @@ def old_posts():
                 f.write(last)
     # stop timer
     end = time.time()
-    print("Loaded in " + str(round((end - start), 2)) + " seconds\n")
+    print("Loaded in " + str(round((end - start), 2)) + " seconds\n\nStarting Stream:\n")
 
 
 def process_data(submission):
@@ -113,7 +111,10 @@ def process_data(submission):
             skip = True
         else:
             # find last number in post x.x (should be chap number)
-            chapter = re.findall(r'[\d\.\d]+', submission.title)[-1]
+            chapter = re.findall(r'[\d\.\-\d]+', submission.title)[-1]
+            # bootleg "Chapter.15 = .15" fix - should use better regex
+            if chapter[0] == ".":
+                chapter = chapter[1:]
     except IndexError:
         chapter = "Other"
     return parsed_date_date, parsed_date_time, chapter, skip
@@ -126,4 +127,3 @@ if __name__ == "__main__":
 
 # TODO connect to mangaplus /chart of upload dates
 # TODO other: windows task manager to run on login (bat)
-# TODO x familt error (Ch.19 returns .19 grr)
