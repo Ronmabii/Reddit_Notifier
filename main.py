@@ -4,7 +4,6 @@ from datetime import datetime
 import win10toast
 import re
 import time
-import webbrowser
 
 
 # loads reddit API login info from json file
@@ -47,7 +46,6 @@ def stream():
                 print(parsed_date_date)
                 print(parsed_date_time)
                 print("\n")
-                webbrowser.open_new_tab(submission.url)
                 # continue didn't work in def process() because not in loop so here we are
                 if skip is True:
                     continue
