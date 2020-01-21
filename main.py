@@ -4,6 +4,7 @@ from datetime import datetime
 import win10toast
 import re
 import time
+import webbrowser
 
 
 # loads reddit API login info from json file
@@ -46,7 +47,8 @@ def stream():
                 print(parsed_date_date)
                 print(parsed_date_time)
                 print("\n")
-                # continue didn't work in def() because not in loop so here we are
+                webbrowser.open_new_tab(submission.url)
+                # continue didn't work in def process() because not in loop so here we are
                 if skip is True:
                     continue
                 # checks if submission is already in filler.csv and adds if not
@@ -106,11 +108,11 @@ def process_data(submission):
         if "Oneshot" in submission.title:
             chapter = "Oneshot"
         elif "Doujinshi" in submission.title:
-            chapter = "Doujinshi " + re.findall(r'[\d\.\d]+', submission.title)[-1]
+            chapter = "Doujinshi " + re.findall(r'[\d\.\-\d]+', submission.title)[-1]
         elif "RAW" in submission.title:
             skip = True
         else:
-            # find last number in post x.x (should be chap number)
+            # find last number in post x.x (should be chap number) ^([a-zA-Z0-9_][a-zA-Z0-9_ ]*[a-zA-Z0-9_]$
             chapter = re.findall(r'[\d\.\-\d]+', submission.title)[-1]
             # bootleg "Chapter.15 = .15" fix - should use better regex
             if chapter[0] == ".":
@@ -127,3 +129,11 @@ if __name__ == "__main__":
 
 # TODO connect to mangaplus /chart of upload dates
 # TODO other: windows task manager to run on login (bat)
+'''
+chapter 123
+chapter 12.3
+ch.123
+ch 1-1
+ch 1 & 2
+^[^ .][\d]+( -&[\d]+)*$
+'''
