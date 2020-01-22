@@ -125,8 +125,7 @@ if __name__ == "__main__":
     old_posts()
     stream()
 
-# TODO connect to mangaplus /chart of upload dates
-# TODO other: windows task manager to run on login (bat)
+# maybe TODO connect to mangaplus /chart of upload dates
 '''
 chapter 123
 chapter 12.3
