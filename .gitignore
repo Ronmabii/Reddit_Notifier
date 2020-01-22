@@ -1,7 +1,7 @@
 /reddit_env
 /.vscode
 credentials.json
-main.bat
+manga_stream.bat
 filler.csv
 manga.json
 manga.txt
