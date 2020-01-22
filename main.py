@@ -61,10 +61,32 @@ def stream():
                 x += 1
 
 
+# playing with classes
+class stackk:
+
+    def __init__(self):
+        self.items = []
+
+    def is_empty(self):
+        return self.items == []
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        return self.items.pop()
+
+    def peek(self):
+        return self.items[len(self.items)-1]
+
+    def size(self):
+        return len(self.items)
+
+
 # gets previous 640 posts + timer
 def old_posts():
     # temporary storage for old posts
-    old_stack = []
+    old_stack = stackk()
     # start timer
     start = time.time()
     print("Loading...\n")
@@ -78,12 +100,12 @@ def old_posts():
                     history = f.read()
                     # adds posts into stack to reverse order
                     if (title + "," + chapter) not in history:
-                        old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
+                        old_stack.push(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
     # if old stack isnt empty, pop everything into csv for correct order
-    if old_stack:
+    if not old_stack.is_empty():
         print("Added:")
         with open('filler.csv', 'a') as f:
-            while old_stack:
+            while not old_stack.is_empty():
                 last = old_stack.pop()
                 print(last)
                 f.write(last)
