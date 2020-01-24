@@ -37,7 +37,7 @@ def stream():
     for submission in subreddit.stream.submissions():
         for title in listed_manga_list:
             if title in submission.title and submission.link_flair_text == "DISC":
-                # print info for .bat window              
+                # print info for .bat window
                 print("---" + str(x) + "---")
                 print(submission.title)
                 print("https://reddit.com" + submission.permalink)
@@ -83,7 +83,10 @@ def old_posts():
                     # adds posts into stack to reverse order
                     if (title + "," + chapter) not in history:
                         old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
-                        # breaks loop to prevent repeats
+                        # breaks loop early to prevent repeats and go to next submission
+                        break
+                    # also breaks loop if its already in
+                    else:
                         break
     # if old stack isnt empty, pop everything into csv for correct order
     if old_stack:
