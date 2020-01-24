@@ -39,6 +39,7 @@ def stream():
             if title in submission.title and submission.link_flair_text == "DISC":
                 # print info for .bat window
                 print("---" + str(x) + "---")
+                x += 1
                 print(submission.title)
                 print("https://reddit.com" + submission.permalink)
                 print(submission.url)
@@ -62,7 +63,6 @@ def stream():
                     # stops title search early to prevent repeats (ex. My Hero Academia vs My Hero Academia: Vigilantes)
                     else:
                         break
-                x += 1
 
 
 # gets previous 640 posts + timer
