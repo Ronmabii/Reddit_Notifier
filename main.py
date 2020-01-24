@@ -4,6 +4,7 @@ from datetime import datetime
 import win10toast
 import re
 import time
+from collections import deque
 
 
 # loads reddit API login info from json file
@@ -64,7 +65,7 @@ def stream():
 # gets previous 640 posts + timer
 def old_posts():
     # temporary storage for old posts
-    old_stack = []
+    old_stack = deque()
     # start timer
     start = time.time()
     print("Loading...\n")
