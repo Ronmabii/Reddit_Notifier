@@ -59,6 +59,9 @@ def stream():
                         f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
                         # notifier
                         toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
+                    # stops title search early to prevent repeats (ex. My Hero Academia vs My Hero Academia: Vigilantes)
+                    else:
+                        break
                 x += 1
 
 
@@ -80,6 +83,8 @@ def old_posts():
                     # adds posts into stack to reverse order
                     if (title + "," + chapter) not in history:
                         old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
+                        # breaks loop to prevent repeats
+                        break
     # if old stack isnt empty, pop everything into csv for correct order
     if old_stack:
         print("Added:")
