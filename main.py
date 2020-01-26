@@ -50,7 +50,7 @@ def stream():
                 print("\n")
                 # continue didn't work in def process() because not in loop so here we are
                 if skip is True:
-                    continue
+                    break
                 # checks if submission is already in filler.csv and adds if not
                 with open('filler.csv', 'a+') as f:
                     f.seek(0)  # a+ does not read from start (?)
@@ -60,6 +60,7 @@ def stream():
                         f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
                         # notifier
                         toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
+                        break
                     # stops title search early to prevent repeats (ex. My Hero Academia vs My Hero Academia: Vigilantes)
                     else:
                         break
@@ -77,7 +78,7 @@ def old_posts():
             if title in submission.title and submission.link_flair_text == "DISC":
                 parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
                 if skip is True:
-                    continue
+                    break
                 with open('filler.csv', 'r') as f:
                     history = f.read()
                     # adds posts into stack to reverse order
@@ -90,7 +91,7 @@ def old_posts():
                         break
     # if old stack isnt empty, pop everything into csv for correct order
     if old_stack:
-        print("Added:")
+        print("Added:\n")
         with open('filler.csv', 'a') as f:
             while old_stack:
                 last = old_stack.pop()
@@ -116,7 +117,9 @@ def process_data(submission):
             chapter = "Oneshot"
         elif "Doujinshi" in submission.title:
             chapter = "Doujinshi " + re.findall(r'[\d\.\-\d]+', submission.title)[-1]
-        elif "RAW" in submission.title:
+        elif "WEBCOMIC" in submission.title:
+            chapter = "Webcomic " + re.findall(r'[\d\.\-\d]+', submission.title)[-1]
+        elif "RAW" in submission.title or "Is Shy" in submission.title:
             skip = True
         else:
             # find last number in post x.x (should be chap number) ^([a-zA-Z0-9_][a-zA-Z0-9_ ]*[a-zA-Z0-9_]$
