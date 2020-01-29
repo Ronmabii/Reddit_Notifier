@@ -43,6 +43,7 @@ def stream():
                 print(submission.title)
                 print("https://reddit.com" + submission.permalink)
                 print(submission.url)
+                print(str(submission.num_comments) + " comments")
                 # data for csv file
                 parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
                 print(parsed_date_date)
