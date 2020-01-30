@@ -139,6 +139,7 @@ if __name__ == "__main__":
     stream()
 
 # maybe TODO connect to mangaplus /chart of upload dates
+# could search by lowercase and return with string.title()
 '''
 chapter 123
 chapter 12.3
