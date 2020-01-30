@@ -36,7 +36,8 @@ def stream():
     x = 1
     for submission in subreddit.stream.submissions():
         for title in listed_manga_list:
-            if title.lower() in submission.title.lower() and submission.link_flair_text == "DISC":
+            # prints info through my manga list only for DISC'S and unclicked
+            if title.lower() in submission.title.lower() and submission.link_flair_text == "DISC" and submission.clicked is False:
                 # print info for .bat window
                 print("---" + str(x) + "---")
                 x += 1
