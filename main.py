@@ -76,7 +76,7 @@ def old_posts():
     print("Loading...\n")
     for submission in subreddit.new(limit=640):  # ~3 days back
         for title in listed_manga_list:
-            if title in submission.title and submission.link_flair_text == "DISC":
+            if title.lower() in submission.title.lower() and submission.link_flair_text == "DISC":
                 parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
                 if skip is True:
                     break
