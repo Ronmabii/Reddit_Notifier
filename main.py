@@ -92,6 +92,7 @@ def old_posts():
                     # also breaks loop if its already in
                     else:
                         break
+    print(old_stack)
     # if old stack isnt empty, pop everything into csv for correct order
     if old_stack:
         print("Added:\n")
@@ -130,6 +131,9 @@ def process_data(submission):
             # bootleg "Chapter.15 = .15" fix - should use better regex
             if chapter[0] == ".":
                 chapter = chapter[1:]
+            # gets second last num if theres not a num ("-") at the end
+            if chapter.isnumeric() is False:
+                chapter = re.findall(r'[\d\.\-\d]+', submission.title)[-2]
     except IndexError:
         chapter = "Other"
     return parsed_date_date, parsed_date_time, chapter, skip
