@@ -38,21 +38,22 @@ def stream():
         for title in listed_manga_list:
             # prints info through my manga list only for DISC'S and unclicked
             if title.lower() in submission.title.lower() and submission.link_flair_text == "DISC" and submission.clicked is False:
+                # data for csv file
+                parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
+                # continue didn't work in def process() because not in loop so here we are
+                if skip is True:
+                    break
                 # print info for .bat window
                 print("---" + str(x) + "---")
                 x += 1
                 print(submission.title)
                 print("https://reddit.com" + submission.permalink)
                 print(submission.url)
-                print(str(submission.num_comments) + " comments")
-                # data for csv file
-                parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
+                print(str(submission.num_comments) + " comments")                
                 print(parsed_date_date)
                 print(parsed_date_time)
                 print("\n")
-                # continue didn't work in def process() because not in loop so here we are
-                if skip is True:
-                    break
+
                 # checks if submission is already in filler.csv and adds if not
                 with open('filler.csv', 'a+') as f:
                     f.seek(0)  # a+ does not read from start (?)
