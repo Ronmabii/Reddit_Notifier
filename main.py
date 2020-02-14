@@ -14,10 +14,6 @@ with open('credentials.json') as f:
 with open('manga.txt') as f2:
     listed_manga_list = [line.rstrip("\n") for line in f2]
 
-'''with open('manga.json') as f2:
-    manga_list = json.load(f2)
-    listed_manga_list = list(manga_list.keys())'''
-
 # logs into reddit
 reddit = praw.Reddit(client_id=params['client_id'],
                      client_secret=params['client_secret'],
@@ -93,7 +89,6 @@ def old_posts():
                     # also breaks loop if its already in
                     else:
                         break
-    print(old_stack)
     # if old stack isnt empty, pop everything into csv for correct order
     if old_stack:
         print("Added:\n")
