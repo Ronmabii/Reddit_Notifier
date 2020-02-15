@@ -128,11 +128,21 @@ def process_data(submission):
             if chapter[0] == ".":
                 chapter = chapter[1:]
             # gets second last num if theres not a num ("-") at the end
-            if chapter.isnumeric() is False:
+            if is_number(chapter) is False:
                 chapter = re.findall(r'[\d\.\-\d]+', submission.title)[-2]
     except IndexError:
         chapter = "Other"
     return parsed_date_date, parsed_date_time, chapter, skip
+
+
+# quick check if its a float or int fix
+def is_number(n):
+    try:
+        float(n)
+        return True
+    except ValueError:
+        return False
+
 
 
 if __name__ == "__main__":
