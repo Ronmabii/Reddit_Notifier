@@ -35,7 +35,7 @@ def stream():
             # prints info through my manga list only for DISC'S and unclicked
             if title.lower() in submission.title.lower() and submission.link_flair_text == "DISC" and submission.clicked is False:
                 # data for csv file
-                parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
+                parsed_date_date, parsed_date_time, chapter, skip, shorter_site = process_data(submission)
                 # continue didn't work in def process() because not in loop so here we are
                 if skip is True:
                     break
@@ -44,11 +44,10 @@ def stream():
                 x += 1
                 print(submission.title)
                 print("https://reddit.com" + submission.permalink)
-                print(submission.url)
-                print(str(submission.num_comments) + " comments")                
+                print(submission.url)           
                 print(parsed_date_date)
                 print(parsed_date_time)
-                print("\n")
+                print(shorter_site)
 
                 # checks if submission is already in filler.csv and adds if not
                 with open('filler.csv', 'a+') as f:
@@ -56,12 +55,14 @@ def stream():
                     history = f.read()
                     # adding only new data to csv file and notifying
                     if (title + "," + chapter) not in history:
-                        f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
+                        f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + shorter_site + "\n")
                         # notifier
-                        toaster.show_toast("GASGASGAS", f"{submission.title}", duration=3)
+                        toaster.show_toast("GASGASGAS", f"{submission.title}", duration=5)
+                        print("***Added***\n")
                         break
                     # stops title search early to prevent repeats (ex. My Hero Academia vs My Hero Academia: Vigilantes)
                     else:
+                        print("\n")
                         break
 
 
@@ -76,14 +77,14 @@ def old_posts():
         for title in listed_manga_list:
             # matches lowercase only for input
             if title.lower() in submission.title.lower() and submission.link_flair_text == "DISC":
-                parsed_date_date, parsed_date_time, chapter, skip = process_data(submission)
+                parsed_date_date, parsed_date_time, chapter, skip, shorter_site = process_data(submission)
                 if skip is True:
                     break
                 with open('filler.csv', 'r') as f:
                     history = f.read()
                     # adds posts into stack to reverse order
                     if (title + "," + chapter) not in history:
-                        old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "\n")
+                        old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + shorter_site + "\n")
                         # breaks loop early to prevent repeats and go to next submission
                         break
                     # also breaks loop if its already in
@@ -111,6 +112,9 @@ def process_data(submission):
     parsed_date = datetime.fromtimestamp(submission.created_utc)
     parsed_date_date = parsed_date.date()
     parsed_date_time = parsed_date.time()
+    # Get basic site name 
+    site = submission.url.lstrip('https://')
+    shorter_site = site.split('.')[0]
     # chapter numbering with special cases
     try:
         if "Oneshot" in submission.title:
@@ -121,6 +125,8 @@ def process_data(submission):
             chapter = "Webcomic " + re.findall(r'[\d\.\-\d]+', submission.title)[-1]
         elif "RAW" in submission.title or "Is Shy" in submission.title:
             skip = True
+        elif "final" in submission.title.lower():
+            chapter = "FINAL"
         else:
             # find last number in post x.x (should be chap number) ^([a-zA-Z0-9_][a-zA-Z0-9_ ]*[a-zA-Z0-9_]$
             chapter = re.findall(r'[\d\.\-\d]+', submission.title)[-1]
@@ -132,10 +138,10 @@ def process_data(submission):
                 chapter = re.findall(r'[\d\.\-\d]+', submission.title)[-2]
     except IndexError:
         chapter = "Other"
-    return parsed_date_date, parsed_date_time, chapter, skip
+    return parsed_date_date, parsed_date_time, chapter, skip, shorter_site
 
 
-# quick check if its a float or int fix
+# quick check if its a float or int
 def is_number(n):
     try:
         float(n)
