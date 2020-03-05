@@ -84,7 +84,7 @@ def old_posts():
                     history = f.read()
                     # adds posts into stack to reverse order
                     if (title + "," + chapter) not in history:
-                        old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + shorter_site + "\n")
+                        old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "," + shorter_site)
                         # breaks loop early to prevent repeats and go to next submission
                         break
                     # also breaks loop if its already in
@@ -114,7 +114,7 @@ def process_data(submission):
     parsed_date_time = parsed_date.time()
     # Get basic site name 
     site = submission.url.lstrip('https://')
-    shorter_site = site.split('.')[0]
+    shorter_site = site.split('.')[0].capitalize()
     # chapter numbering with special cases
     try:
         if "Oneshot" in submission.title:
