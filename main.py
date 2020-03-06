@@ -84,7 +84,7 @@ def old_posts():
                     history = f.read()
                     # adds posts into stack to reverse order
                     if (title + "," + chapter) not in history:
-                        old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "," + shorter_site)
+                        old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "," + shorter_site + "\n")
                         # breaks loop early to prevent repeats and go to next submission
                         break
                     # also breaks loop if its already in
@@ -100,7 +100,7 @@ def old_posts():
                 f.write(last)
     # stop timer
     end = time.time()
-    print("Loaded in " + str(round((end - start), 2)) + " seconds\n\nStarting Stream:\n")
+    print("\nLoaded in " + str(round((end - start), 2)) + " seconds\n\nStarting Stream:\n")
 
 
 def process_data(submission):
