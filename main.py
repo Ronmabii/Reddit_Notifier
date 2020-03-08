@@ -55,7 +55,7 @@ def stream():
                     history = f.read()
                     # adding only new data to csv file and notifying
                     if (title + "," + chapter) not in history:
-                        f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + shorter_site + "\n")
+                        f.write(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "," + shorter_site + "\n")
                         # notifier
                         toaster.show_toast("GASGASGAS", f"{submission.title}", duration=5)
                         print("***Added***\n")
@@ -92,7 +92,7 @@ def old_posts():
                         break
     # if old stack isnt empty, pop everything into csv for correct order
     if old_stack:
-        print("Added:\n")
+        print("Added:\n\n")
         with open('filler.csv', 'a') as f:
             while old_stack:
                 last = old_stack.pop()
@@ -115,6 +115,8 @@ def process_data(submission):
     # Get basic site name 
     site = submission.url.lstrip('https://')
     shorter_site = site.split('.')[0].capitalize()
+    if site[0:3] == 'www':
+        shorter_site = site.split('.')[1].capitalize() #[www, website, com]
     # chapter numbering with special cases
     try:
         if "Oneshot" in submission.title:
