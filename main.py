@@ -33,7 +33,7 @@ def stream():
     for submission in subreddit.stream.submissions():
         for title in listed_manga_list:
             # prints info through my manga list only for DISC'S and unclicked
-            if title.lower() in submission.title.lower() and submission.link_flair_text == "DISC" and submission.clicked is False:
+            if title.lower() in submission.title.lower() and "DISC" in submission.title and submission.clicked is False:
                 # data for csv file
                 parsed_date_date, parsed_date_time, chapter, skip, shorter_site = process_data(submission)
                 # continue didn't work in def process() because not in loop so here we are
@@ -76,7 +76,7 @@ def old_posts():
     for submission in subreddit.new(limit=640):  # ~3 days back
         for title in listed_manga_list:
             # matches lowercase only for input
-            if title.lower() in submission.title.lower() and submission.link_flair_text == "DISC":
+            if title.lower() in submission.title.lower() and "DISC" in submission.title:
                 parsed_date_date, parsed_date_time, chapter, skip, shorter_site = process_data(submission)
                 if skip is True:
                     break
@@ -84,10 +84,14 @@ def old_posts():
                     history = f.read()
                     # adds posts into stack to reverse order
                     if (title + "," + chapter) not in history:
-                        old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "," + shorter_site + "\n")
-                        # breaks loop early to prevent repeats and go to next submission
+                        # any() is to find substring in list/deque
+                        if any(title + "," + chapter in i for i in old_stack):
+                            break
+                        else:
+                            old_stack.append(title + "," + chapter + "," + str(parsed_date_date) + "," + str(parsed_date_time) + "," + shorter_site + "\n")
+                        # breaks inner loop early to prevent repeats and go to next submission
                         break
-                    # also breaks loop if its already in
+                    # also breaks loop if post is already in
                     else:
                         break
     # if old stack isnt empty, pop everything into csv for correct order
@@ -104,9 +108,8 @@ def old_posts():
 
 
 def process_data(submission):
-    # ignore submission initialize
+    # initialize
     skip = False
-    # mandatory chapter initialize
     chapter = None
     # split datetime into date and time
     parsed_date = datetime.fromtimestamp(submission.created_utc)
@@ -154,17 +157,8 @@ def is_number(n):
 
 
 if __name__ == "__main__":
-    # run main functions
     old_posts()
     stream()
 
 # maybe TODO connect to mangaplus /chart of upload dates
-# could search by lowercase and return with string.title()
-'''
-chapter 123
-chapter 12.3
-ch.123
-ch 1-1
-ch 1 & 2
-^[^ .][\d]+( -&[\d]+)*$
-'''
+
