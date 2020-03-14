@@ -32,8 +32,8 @@ def stream():
     x = 1
     for submission in subreddit.stream.submissions():
         for title in listed_manga_list:
-            # prints info through my manga list only for DISC'S and unclicked
-            if title.lower() in submission.title.lower() and "DISC" in submission.title and submission.clicked is False:
+            # prints info through my manga list only for DISC'S
+            if title.lower() in submission.title.lower() and ("DISC" in submission.title or submission.link_flair_text == "DISC"):
                 # data for csv file
                 parsed_date_date, parsed_date_time, chapter, skip, shorter_site = process_data(submission)
                 # continue didn't work in def process() because not in loop so here we are
@@ -76,7 +76,7 @@ def old_posts():
     for submission in subreddit.new(limit=640):  # ~3 days back
         for title in listed_manga_list:
             # matches lowercase only for input
-            if title.lower() in submission.title.lower() and "DISC" in submission.title:
+            if title.lower() in submission.title.lower() and ("DISC" in submission.title or submission.link_flair_text == "DISC"):
                 parsed_date_date, parsed_date_time, chapter, skip, shorter_site = process_data(submission)
                 if skip is True:
                     break
