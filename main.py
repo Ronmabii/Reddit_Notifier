@@ -115,8 +115,8 @@ def process_data(submission):
     parsed_date = datetime.fromtimestamp(submission.created_utc)
     parsed_date_date = parsed_date.date()
     parsed_date_time = parsed_date.time()
-    # Get basic site name 
-    site = submission.url.lstrip('https://')
+    # Get basic site name (cut https then .com)
+    site = submission.url.split('//')[1]
     shorter_site = site.split('.')[0].capitalize()
     if site[0:3] == 'www':
         shorter_site = site.split('.')[1].capitalize() #[www, website, com]
