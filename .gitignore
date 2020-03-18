@@ -5,3 +5,4 @@ manga_stream.bat
 filler.csv
 manga.json
 manga.txt
+/__pycache__
