@@ -105,6 +105,8 @@ def old_posts():
     # stop timer
     end = time.time()
     print("\nLoaded in " + str(round((end - start), 2)) + " seconds\n\nStarting Stream:\n")
+    # for the unit test
+    return True
 
 
 def process_data(submission):
