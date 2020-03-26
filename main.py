@@ -5,6 +5,7 @@ import win10toast
 import re
 import time
 from collections import deque
+import urllib
 
 
 # loads reddit API login info from json file
@@ -24,10 +25,9 @@ reddit = praw.Reddit(client_id=params['client_id'],
 # pick a subreddit
 subreddit = reddit.subreddit('manga')
 
-
 # constant stream of submissions (gets previous 100 posts too)
 def stream():
-    # activate the toaster
+    # activate the notifier
     toaster = win10toast.ToastNotifier()
     x = 1
     for submission in subreddit.stream.submissions():
@@ -106,7 +106,7 @@ def old_posts():
     end = time.time()
     print("\nLoaded in " + str(round((end - start), 2)) + " seconds\n\nStarting Stream:\n")
     # for the unit test
-    return True
+    
 
 
 def process_data(submission):
@@ -159,8 +159,16 @@ def is_number(n):
 
 
 if __name__ == "__main__":
-    old_posts()
-    stream()
+    while True:
+        try:
+            old_posts()
+            stream()
+        except urllib.error.HTTPError as e:
+            if e.code == 503:
+                print("Error 503: Reconnecting...")
+                stream()
+            else:
+                print("Error %s" % e.code)
+
 
 # maybe TODO connect to mangaplus /chart of upload dates
-
