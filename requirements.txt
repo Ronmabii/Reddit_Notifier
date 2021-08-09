@@ -9,7 +9,7 @@ prawcore==1.0.1
 pycodestyle==2.5.0
 pyflakes==2.1.1
 pypiwin32==223
-pywin32==227
+pywin32==301
 requests==2.22.0
 six==1.13.0
 update-checker==0.16
