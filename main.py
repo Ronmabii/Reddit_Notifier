@@ -77,7 +77,12 @@ def old_posts():
         for title in listed_manga_list:
             # matches lowercase only for input
             if title.lower() in submission.title.lower() and ("DISC" in submission.title or submission.link_flair_text == "DISC"):
-                parsed_date_date, parsed_date_time, chapter, skip, shorter_site = process_data(submission)
+                # had a random submission.url that didn't have a // so it broke so "try"
+                try:
+                    parsed_date_date, parsed_date_time, chapter, skip, shorter_site = process_data(submission)
+                except:
+                    print("Skipped " + submission.title)
+                    pass
                 if skip is True:
                     break
                 with open('filler.csv', 'r') as f:
