@@ -8,7 +8,7 @@ from collections import deque
 import urllib
 
 
-# loads reddit API login info from json file
+# loads reddit API login info from json file x
 with open('credentials.json') as f:
     params = json.load(f)
 # loads manga list with aptly named list
